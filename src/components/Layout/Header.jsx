@@ -66,7 +66,7 @@ export default function Header({ handleDrawerToggle }) {
         borderBottom: '1px solid #333',
         boxShadow: 'none',
         minHeight: 56,
-        maxWidth: isMobile ? '96vw' : '98vw',
+        // maxWidth: isMobile ? '96vw' : '98vw',
       }}
     >
       <Toolbar sx={{ justifyContent: 'space-between', minHeight: 56 }}>
