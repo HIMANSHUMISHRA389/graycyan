@@ -10,6 +10,8 @@ import {
   Box,
   Typography,
   Divider,
+  useTheme,
+  useMediaQuery,
 } from '@mui/material';
 import {
   Home,
@@ -78,7 +80,9 @@ const menuItems = [
   { text: 'Pricelist', icon: <AttachMoney />, path: '/pricelist' },
 ];
 
-export default function Sidebar() {
+export default function Sidebar({ mobileOpen, handleDrawerToggle }) {
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   const [expanded, setExpanded] = React.useState({ Inventory: true });
 
   const handleExpand = (item) => {
@@ -88,20 +92,8 @@ export default function Sidebar() {
     }));
   };
 
-  return (
-    <Drawer
-      variant="permanent"
-      sx={{
-        width: drawerWidth,
-        flexShrink: 0,
-        '& .MuiDrawer-paper': {
-          width: drawerWidth,
-          boxSizing: 'border-box',
-          backgroundColor: '#1a1a1a',
-          borderRight: '1px solid #333',
-        },
-      }}
-    >
+  const drawerContent = (
+    <>
       <Box sx={{ p: 2 }}>
         <Typography 
           variant="h6" 
@@ -182,6 +174,32 @@ export default function Sidebar() {
           </React.Fragment>
         ))}
       </List>
-    </Drawer>
+    </>
+  );
+
+  return (
+    <Box
+      component="nav"
+      sx={{ width: { md: drawerWidth }, flexShrink: { md: 0 } }}
+    >
+      <Drawer
+        variant={isMobile ? 'temporary' : 'permanent'}
+        open={isMobile ? mobileOpen : true}
+        onClose={handleDrawerToggle}
+        ModalProps={{
+          keepMounted: true, // Better open performance on mobile.
+        }}
+        sx={{
+          '& .MuiDrawer-paper': {
+            boxSizing: 'border-box',
+            width: drawerWidth,
+            backgroundColor: '#1a1a1a',
+            borderRight: '1px solid #333',
+          },
+        }}
+      >
+        {drawerContent}
+      </Drawer>
+    </Box>
   );
 }

@@ -9,6 +9,8 @@ import {
   InputBase,
   Typography,
   Switch,
+  useMediaQuery,
+  useTheme,
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import {
@@ -16,7 +18,7 @@ import {
   Notifications,
   Language,
   Help,
-  DarkMode,
+  Menu as MenuIcon,
 } from '@mui/icons-material';
 
 // Custom Switch styled to match screenshot
@@ -49,7 +51,9 @@ const ThemeSwitch = styled(Switch)(({ theme }) => ({
   },
 }));
 
-export default function Header() {
+export default function Header({ handleDrawerToggle }) {
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   const [searchFocus, setSearchFocus] = React.useState(false);
   const [themeChecked, setThemeChecked] = React.useState(false);
 
@@ -62,26 +66,36 @@ export default function Header() {
         borderBottom: '1px solid #333',
         boxShadow: 'none',
         minHeight: 56,
+        maxWidth: isMobile ? '96vw' : '98vw',
       }}
     >
       <Toolbar sx={{ justifyContent: 'space-between', minHeight: 56 }}>
-        {/* Logo */}
         <Box sx={{ display: 'flex', alignItems: 'center', flex: 1 }}>
+          {isMobile && (
+            <IconButton
+              color="inherit"
+              aria-label="open drawer"
+              edge="start"
+              onClick={handleDrawerToggle}
+              sx={{ mr: 2 }}
+            >
+              <MenuIcon />
+            </IconButton>
+          )}
           <Typography
             variant="h6"
             sx={{
               fontFamily: '"Pacifico", cursive',
               color: 'white',
               fontSize: 22,
-              ml: 2,
               mr: 2,
               letterSpacing: 1,
               userSelect: 'none',
+              display: { xs: 'none', sm: 'block' },
             }}
           >
             Company Logo
           </Typography>
-          {/* Expanding Search Box */}
           <Box
             sx={{
               position: 'relative',
@@ -96,6 +110,7 @@ export default function Header() {
               ml: 1,
               px: searchFocus ? 2 : 0,
               boxShadow: searchFocus ? '0 0 0 2px #9c27b0' : 'none',
+              display: { xs: 'none', md: 'flex' },
             }}
             onMouseEnter={() => setSearchFocus(true)}
             onMouseLeave={() => setSearchFocus(false)}
@@ -114,10 +129,8 @@ export default function Header() {
           </Box>
         </Box>
 
-        {/* Right Side */}
-        <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-          {/* Theme Switch */}
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: { xs: 1, sm: 2 } }}>
+          <Box sx={{ display: { xs: 'none', sm: 'flex' }, alignItems: 'center', gap: 1 }}>
             <Typography variant="body2" sx={{ color: 'white', mr: 0.5 }}>
               Theme
             </Typography>
@@ -127,20 +140,18 @@ export default function Header() {
             />
           </Box>
 
-          {/* Icons */}
           <IconButton color="inherit">
             <Badge badgeContent={4} color="error">
               <Notifications sx={{ color: 'white' }} />
             </Badge>
           </IconButton>
-          <IconButton color="inherit">
+          <IconButton color="inherit" sx={{ display: { xs: 'none', sm: 'block' } }}>
             <Language sx={{ color: 'white' }} />
           </IconButton>
-          <IconButton color="inherit">
+          <IconButton color="inherit" sx={{ display: { xs: 'none', sm: 'block' } }}>
             <Help sx={{ color: 'white' }} />
           </IconButton>
 
-          {/* Avatar */}
           <Avatar
             sx={{
               width: 32,

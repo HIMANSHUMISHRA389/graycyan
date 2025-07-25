@@ -6,10 +6,14 @@ import {
   IconButton,
   Tooltip,
   Divider,
+  useTheme,
+  useMediaQuery,
 } from '@mui/material';
-import { AttachMoney, Edit, ArrowDropUp } from '@mui/icons-material';
+import { AttachMoney, Edit, ArrowDropUp, MoreVert } from '@mui/icons-material';
 
 export default function ProductFinancials() {
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   return (
     <Box
       sx={{
@@ -22,12 +26,12 @@ export default function ProductFinancials() {
       }}
     >
       {/* Header */}
-      <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 2 }}>
+      <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 2, flexWrap: 'wrap' }}>
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
           <Box
             sx={{
-              width: 40,
-              height: 40,
+              width: { xs: 32, md: 40 },
+              height: { xs: 32, md: 40 },
               borderRadius: '50%',
               backgroundColor: '#a259e6',
               display: 'flex',
@@ -36,31 +40,39 @@ export default function ProductFinancials() {
               boxShadow: '0 2px 8px rgba(162,89,230,0.15)',
             }}
           >
-            <AttachMoney sx={{ color: 'white', fontSize: 24 }} />
+            <AttachMoney sx={{ color: 'white', fontSize: { xs: 20, md: 24 } }} />
           </Box>
-          <Typography variant="h6" sx={{ fontWeight: 600, color: 'white', fontSize: 22 }}>
+          <Typography variant={isMobile ? "h6" : "h5"} sx={{ fontWeight: 600, color: 'white' }}>
             Product Financials
           </Typography>
         </Box>
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-          <Tooltip title="Edit">
-            <IconButton
-              size="small"
-              sx={{
-                background: 'linear-gradient(135deg, #a259e6 60%, #7f53c0 100%)',
-                color: 'white',
-                borderRadius: 2,
-                p: 1,
-                boxShadow: '0 2px 8px rgba(162,89,230,0.15)',
-                '&:hover': { background: 'linear-gradient(135deg, #7f53c0 60%, #a259e6 100%)' },
-              }}
-            >
-              <Edit sx={{ fontSize: 24 }} />
+          {isMobile ? (
+            <IconButton size="small" sx={{ color: 'white' }}>
+              <MoreVert />
             </IconButton>
-          </Tooltip>
-          <IconButton size="small" sx={{ color: 'white', ml: 1 }}>
-            <ArrowDropUp sx={{ fontSize: 32 }} />
-          </IconButton>
+          ) : (
+            <>
+              <Tooltip title="Edit">
+                <IconButton
+                  size="small"
+                  sx={{
+                    background: 'linear-gradient(135deg, #a259e6 60%, #7f53c0 100%)',
+                    color: 'white',
+                    borderRadius: 2,
+                    p: 1,
+                    boxShadow: '0 2px 8px rgba(162,89,230,0.15)',
+                    '&:hover': { background: 'linear-gradient(135deg, #7f53c0 60%, #a259e6 100%)' },
+                  }}
+                >
+                  <Edit sx={{ fontSize: 24 }} />
+                </IconButton>
+              </Tooltip>
+              <IconButton size="small" sx={{ color: 'white', ml: 1 }}>
+                <ArrowDropUp sx={{ fontSize: 32 }} />
+              </IconButton>
+            </>
+          )}
         </Box>
       </Box>
       <Divider sx={{ borderColor: '#4a4a5a', mb: 3 }} />

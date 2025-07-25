@@ -7,8 +7,10 @@ import {
   IconButton,
   Tooltip,
   Divider,
+  useTheme,
+  useMediaQuery,
 } from '@mui/material';
-import { Tune, Edit, Add, ArrowDropUp } from '@mui/icons-material';
+import { Tune, Edit, Add, ArrowDropUp, MoreVert } from '@mui/icons-material';
 
 const colors = [
   { name: 'Brown', color: '#8d4004' },
@@ -27,6 +29,8 @@ const dimensions = [
 const controls = ['WeCan', 'WeCanX'];
 
 export default function ProductOptions() {
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const [selectedColor, setSelectedColor] = useState(0);
   const [selectedDimension, setSelectedDimension] = useState(0);
   const [selectedControl, setSelectedControl] = useState(0);
@@ -40,15 +44,25 @@ export default function ProductOptions() {
         boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
         p: 3,
         mb: 2,
+        maxWidth: isMobile ? '92vw' : '100%',
+        overflowX: 'hidden', // Prevent screen-wide scroll
       }}
     >
       {/* Header */}
-      <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 2 }}>
+      <Box
+        sx={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          mb: 2,
+          flexWrap: 'wrap',
+        }}
+      >
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
           <Box
             sx={{
-              width: 40,
-              height: 40,
+              width: { xs: 32, md: 40 },
+              height: { xs: 32, md: 40 },
               borderRadius: '50%',
               backgroundColor: '#a259e6',
               display: 'flex',
@@ -57,31 +71,39 @@ export default function ProductOptions() {
               boxShadow: '0 2px 8px rgba(162,89,230,0.15)',
             }}
           >
-            <Tune sx={{ color: 'white', fontSize: 24 }} />
+            <Tune sx={{ color: 'white', fontSize: { xs: 20, md: 24 } }} />
           </Box>
-          <Typography variant="h6" sx={{ fontWeight: 600, color: 'white', fontSize: 22 }}>
+          <Typography variant={isMobile ? 'h6' : 'h5'} sx={{ fontWeight: 600, color: 'white' }}>
             Product Options
           </Typography>
         </Box>
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-          <Tooltip title="Add Option">
-            <IconButton
-              size="small"
-              sx={{
-                background: 'linear-gradient(135deg, #a259e6 60%, #7f53c0 100%)',
-                color: 'white',
-                borderRadius: 2,
-                p: 1,
-                boxShadow: '0 2px 8px rgba(162,89,230,0.15)',
-                '&:hover': { background: 'linear-gradient(135deg, #7f53c0 60%, #a259e6 100%)' },
-              }}
-            >
-              <Add sx={{ fontSize: 24 }} />
+          {isMobile ? (
+            <IconButton size="small" sx={{ color: 'white' }}>
+              <MoreVert />
             </IconButton>
-          </Tooltip>
-          <IconButton size="small" sx={{ color: 'white', ml: 1 }}>
-            <ArrowDropUp sx={{ fontSize: 32 }} />
-          </IconButton>
+          ) : (
+            <>
+              <Tooltip title="Add Option">
+                <IconButton
+                  size="small"
+                  sx={{
+                    background: 'linear-gradient(135deg, #a259e6 60%, #7f53c0 100%)',
+                    color: 'white',
+                    borderRadius: 2,
+                    p: 1,
+                    boxShadow: '0 2px 8px rgba(162,89,230,0.15)',
+                    '&:hover': { background: 'linear-gradient(135deg, #7f53c0 60%, #a259e6 100%)' },
+                  }}
+                >
+                  <Add sx={{ fontSize: 24 }} />
+                </IconButton>
+              </Tooltip>
+              <IconButton size="small" sx={{ color: 'white', ml: 1 }}>
+                <ArrowDropUp sx={{ fontSize: 32 }} />
+              </IconButton>
+            </>
+          )}
         </Box>
       </Box>
       <Divider sx={{ borderColor: '#4a4a5a', mb: 3 }} />
@@ -119,13 +141,13 @@ export default function ProductOptions() {
             <Edit sx={{ fontSize: 20 }} />
           </IconButton>
         </Tooltip>
-        <Box sx={{ display: 'flex', gap: 2, mt: 2 }}>
+        <Box sx={{ display: 'flex', gap: 2, mt: 2, overflowX: 'auto', pb: 1 }}>
           {colors.map((color, index) => (
             <Box
               key={index}
               onClick={() => setSelectedColor(index)}
               sx={{
-                width: 44,
+                minWidth: 44,
                 height: 44,
                 backgroundColor: color.color,
                 borderRadius: 2,
@@ -134,7 +156,7 @@ export default function ProductOptions() {
                 transition: 'border 0.2s ease-in-out',
                 '&:hover': {
                   transform: 'scale(1.05)',
-                }
+                },
               }}
             />
           ))}
@@ -174,7 +196,7 @@ export default function ProductOptions() {
             <Edit sx={{ fontSize: 20 }} />
           </IconButton>
         </Tooltip>
-        <Box sx={{ display: 'flex', gap: 2, mt: 2 }}>
+        <Box sx={{ display: 'flex', gap: 2, mt: 2, overflowX: 'auto', pb: 1 }}>
           {dimensions.map((dimension, index) => (
             <Chip
               key={index}
@@ -187,6 +209,7 @@ export default function ProductOptions() {
                 fontWeight: 500,
                 fontSize: '1rem',
                 px: 2,
+                whiteSpace: 'nowrap',
                 '&:hover': {
                   backgroundColor: selectedDimension === index ? '#7f53c0' : '#555',
                 },
@@ -196,7 +219,7 @@ export default function ProductOptions() {
         </Box>
       </Box>
 
-      {/* Control */}
+      {/* Controls */}
       <Box
         sx={{
           background: '#363846',
@@ -228,7 +251,7 @@ export default function ProductOptions() {
             <Edit sx={{ fontSize: 20 }} />
           </IconButton>
         </Tooltip>
-        <Box sx={{ display: 'flex', gap: 2, mt: 2 }}>
+        <Box sx={{ display: 'flex', gap: 2, mt: 2, overflowX: 'auto', pb: 1 }}>
           {controls.map((control, index) => (
             <Button
               key={index}
@@ -240,6 +263,7 @@ export default function ProductOptions() {
                 color: 'white',
                 fontWeight: 500,
                 px: 3,
+                whiteSpace: 'nowrap',
                 '&:hover': {
                   backgroundColor: selectedControl === index ? '#7f53c0' : '#404040',
                   borderColor: '#a259e6',
